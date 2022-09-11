@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "802635703724",
+    "project_id": "carapp-398e3",
+    "storage_bucket": "carapp-398e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802635703724:android:3f61b8a3f3eb20d6cec609",
+        "android_client_info": {
+          "package_name": "com.flutterflow.edriveapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802635703724-4t2b79vmr4jed1j1i13gd9srlp3n2tb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzZHYKjuxoR2Hv6NGmeeVCmTRQMM0VjcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802635703724-4t2b79vmr4jed1j1i13gd9srlp3n2tb9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "802635703724-ijd2v4s87l9s3oiflq33tjj3tetmius5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flutterflow.wimax"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
