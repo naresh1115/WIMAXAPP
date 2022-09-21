@@ -38,6 +38,12 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
 
   String? get college;
 
+  @BuiltValueField(wireName: 'Following')
+  BuiltList<DocumentReference>? get following;
+
+  @BuiltValueField(wireName: 'Follower_list_ref')
+  BuiltList<DocumentReference>? get followerListRef;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -53,7 +59,9 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..department = ''
     ..skills = ''
     ..domain = ''
-    ..college = '';
+    ..college = ''
+    ..following = ListBuilder()
+    ..followerListRef = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -65,6 +73,43 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   static Future<UsersRecord> getDocumentOnce(DocumentReference ref) => ref
       .get()
       .then((s) => serializers.deserializeWith(serializer, serializedData(s))!);
+
+  static UsersRecord fromAlgolia(AlgoliaObjectSnapshot snapshot) => UsersRecord(
+        (c) => c
+          ..createdTime = safeGet(() => DateTime.fromMillisecondsSinceEpoch(
+              snapshot.data['created_time']))
+          ..email = snapshot.data['email']
+          ..displayName = snapshot.data['display_name']
+          ..password = snapshot.data['password']
+          ..photoUrl = snapshot.data['photo_url']
+          ..phoneNumber = snapshot.data['phone_number']
+          ..uid = snapshot.data['uid']
+          ..bio = snapshot.data['bio']
+          ..department = snapshot.data['department']
+          ..skills = snapshot.data['Skills']
+          ..domain = snapshot.data['domain']
+          ..college = snapshot.data['college']
+          ..following = safeGet(() =>
+              ListBuilder(snapshot.data['Following'].map((s) => toRef(s))))
+          ..followerListRef = safeGet(() => ListBuilder(
+              snapshot.data['Follower_list_ref'].map((s) => toRef(s))))
+          ..ffRef = UsersRecord.collection.doc(snapshot.objectID),
+      );
+
+  static Future<List<UsersRecord>> search(
+          {String? term,
+          FutureOr<LatLng>? location,
+          int? maxResults,
+          double? searchRadiusMeters}) =>
+      FFAlgoliaManager.instance
+          .algoliaQuery(
+            index: 'users',
+            term: term,
+            maxResults: maxResults,
+            location: location,
+            searchRadiusMeters: searchRadiusMeters,
+          )
+          .then((r) => r.map(fromAlgolia).toList());
 
   UsersRecord._();
   factory UsersRecord([void Function(UsersRecordBuilder) updates]) =
@@ -105,7 +150,9 @@ Map<String, dynamic> createUsersRecordData({
         ..department = department
         ..skills = skills
         ..domain = domain
-        ..college = college,
+        ..college = college
+        ..following = null
+        ..followerListRef = null,
     ),
   );
 

@@ -22,6 +22,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   void initState() {
     super.initState();
     emailFieldController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -29,11 +30,11 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF111827),
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
-            Navigator.pop(context);
+            context.pop();
           },
           child: Icon(
             Icons.arrow_back_rounded,
@@ -153,7 +154,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
               options: FFButtonOptions(
                 width: 230,
                 height: 50,
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: Color(0xFF60D4E4),
                 textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: FlutterFlowTheme.of(context).subtitle2Family,
                       color: Colors.black,

@@ -1,11 +1,7 @@
 import '../auth/auth_util.dart';
-import '../create_account/create_account_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../forgot_password/forgot_password_widget.dart';
-import '../main.dart';
-import '../phone/phone_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -33,6 +29,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     emailAddressController = TextEditingController();
     passwordController = TextEditingController();
     passwordVisibility = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -44,7 +41,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 1,
         decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).tertiaryColor,
+          color: FlutterFlowTheme.of(context).primaryBackground,
         ),
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -258,12 +255,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateAccountWidget(),
-                            ),
-                          );
+                          context.pushNamed('createAccount');
                         },
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -286,12 +278,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             ),
                             InkWell(
                               onTap: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CreateAccountWidget(),
-                                  ),
-                                );
+                                context.pushNamed('createAccount');
                               },
                               child: Text(
                                 'Create Account',
@@ -313,6 +300,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
+                          GoRouter.of(context).prepareAuthEvent();
+
                           final user = await signInWithEmail(
                             context,
                             emailAddressController!.text,
@@ -322,14 +311,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             return;
                           }
 
-                          await Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'HomePage'),
-                            ),
-                            (r) => false,
-                          );
+                          context.goNamedAuth('HomePage', mounted);
                         },
                         text: 'Login',
                         options: FFButtonOptions(
@@ -375,19 +357,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 5, 0, 24),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ForgotPasswordWidget(),
-                                      ),
-                                    );
+                                    context.pushNamed('forgotPassword');
                                   },
                                   text: 'Forgot Password?',
                                   options: FFButtonOptions(
                                     width: 170,
                                     height: 40,
-                                    color: Color(0xFF60D4E4),
+                                    color: Color(0xFFF95521),
                                     textStyle: FlutterFlowTheme.of(context)
                                         .subtitle2
                                         .override(
@@ -441,21 +417,16 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         ),
                                         child: InkWell(
                                           onTap: () async {
+                                            GoRouter.of(context)
+                                                .prepareAuthEvent();
                                             final user =
                                                 await signInWithGoogle(context);
                                             if (user == null) {
                                               return;
                                             }
-                                            await Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NavBarPage(
-                                                        initialPage:
-                                                            'HomePage'),
-                                              ),
-                                              (r) => false,
-                                            );
+
+                                            context.goNamedAuth(
+                                                'HomePage', mounted);
                                           },
                                           child: Image.asset(
                                             'assets/images/Book.png',
@@ -474,13 +445,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       ),
                                       child: InkWell(
                                         onTap: () async {
-                                          await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PhoneWidget(),
-                                            ),
-                                          );
+                                          context.pushNamed('phone');
                                         },
                                         child: Image.asset(
                                           'assets/images/Book_Copy_2.png',
@@ -491,52 +456,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                                child: FFButtonWidget(
-                                  onPressed: () async {
-                                    final user =
-                                        await signInAnonymously(context);
-                                    if (user == null) {
-                                      return;
-                                    }
-                                    await Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            NavBarPage(initialPage: 'HomePage'),
-                                      ),
-                                      (r) => false,
-                                    );
-                                  },
-                                  text: 'Continue as Guest',
-                                  options: FFButtonOptions(
-                                    width: 230,
-                                    height: 50,
-                                    color: Color(0xFFF95522),
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .subtitle2
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .subtitle2Family,
-                                          color: Color(0xF7FFFFFF),
-                                          fontWeight: FontWeight.bold,
-                                          useGoogleFonts: GoogleFonts.asMap()
-                                              .containsKey(
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle2Family),
-                                        ),
-                                    elevation: 0,
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
                                 ),
                               ),
                             ],

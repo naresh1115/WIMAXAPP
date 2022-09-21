@@ -103,6 +103,26 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.following;
+    if (value != null) {
+      result
+        ..add('Following')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.followerListRef;
+    if (value != null) {
+      result
+        ..add('Follower_list_ref')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -173,6 +193,20 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.college = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'Following':
+          result.following.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'Follower_list_ref':
+          result.followerListRef.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -212,6 +246,10 @@ class _$UsersRecord extends UsersRecord {
   @override
   final String? college;
   @override
+  final BuiltList<DocumentReference<Object?>>? following;
+  @override
+  final BuiltList<DocumentReference<Object?>>? followerListRef;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -230,6 +268,8 @@ class _$UsersRecord extends UsersRecord {
       this.skills,
       this.domain,
       this.college,
+      this.following,
+      this.followerListRef,
       this.ffRef})
       : super._();
 
@@ -256,6 +296,8 @@ class _$UsersRecord extends UsersRecord {
         skills == other.skills &&
         domain == other.domain &&
         college == other.college &&
+        following == other.following &&
+        followerListRef == other.followerListRef &&
         ffRef == other.ffRef;
   }
 
@@ -273,19 +315,25 @@ class _$UsersRecord extends UsersRecord {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc(0,
-                                                        createdTime.hashCode),
-                                                    email.hashCode),
-                                                displayName.hashCode),
-                                            password.hashCode),
-                                        photoUrl.hashCode),
-                                    phoneNumber.hashCode),
-                                uid.hashCode),
-                            bio.hashCode),
-                        department.hashCode),
-                    skills.hashCode),
-                domain.hashCode),
-            college.hashCode),
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(
+                                                                0,
+                                                                createdTime
+                                                                    .hashCode),
+                                                            email.hashCode),
+                                                        displayName.hashCode),
+                                                    password.hashCode),
+                                                photoUrl.hashCode),
+                                            phoneNumber.hashCode),
+                                        uid.hashCode),
+                                    bio.hashCode),
+                                department.hashCode),
+                            skills.hashCode),
+                        domain.hashCode),
+                    college.hashCode),
+                following.hashCode),
+            followerListRef.hashCode),
         ffRef.hashCode));
   }
 
@@ -304,6 +352,8 @@ class _$UsersRecord extends UsersRecord {
           ..add('skills', skills)
           ..add('domain', domain)
           ..add('college', college)
+          ..add('following', following)
+          ..add('followerListRef', followerListRef)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -360,6 +410,19 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String? get college => _$this._college;
   set college(String? college) => _$this._college = college;
 
+  ListBuilder<DocumentReference<Object?>>? _following;
+  ListBuilder<DocumentReference<Object?>> get following =>
+      _$this._following ??= new ListBuilder<DocumentReference<Object?>>();
+  set following(ListBuilder<DocumentReference<Object?>>? following) =>
+      _$this._following = following;
+
+  ListBuilder<DocumentReference<Object?>>? _followerListRef;
+  ListBuilder<DocumentReference<Object?>> get followerListRef =>
+      _$this._followerListRef ??= new ListBuilder<DocumentReference<Object?>>();
+  set followerListRef(
+          ListBuilder<DocumentReference<Object?>>? followerListRef) =>
+      _$this._followerListRef = followerListRef;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -383,6 +446,8 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _skills = $v.skills;
       _domain = $v.domain;
       _college = $v.college;
+      _following = $v.following?.toBuilder();
+      _followerListRef = $v.followerListRef?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -404,21 +469,38 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   UsersRecord build() => _build();
 
   _$UsersRecord _build() {
-    final _$result = _$v ??
-        new _$UsersRecord._(
-            createdTime: createdTime,
-            email: email,
-            displayName: displayName,
-            password: password,
-            photoUrl: photoUrl,
-            phoneNumber: phoneNumber,
-            uid: uid,
-            bio: bio,
-            department: department,
-            skills: skills,
-            domain: domain,
-            college: college,
-            ffRef: ffRef);
+    _$UsersRecord _$result;
+    try {
+      _$result = _$v ??
+          new _$UsersRecord._(
+              createdTime: createdTime,
+              email: email,
+              displayName: displayName,
+              password: password,
+              photoUrl: photoUrl,
+              phoneNumber: phoneNumber,
+              uid: uid,
+              bio: bio,
+              department: department,
+              skills: skills,
+              domain: domain,
+              college: college,
+              following: _following?.build(),
+              followerListRef: _followerListRef?.build(),
+              ffRef: ffRef);
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'following';
+        _following?.build();
+        _$failedField = 'followerListRef';
+        _followerListRef?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'UsersRecord', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

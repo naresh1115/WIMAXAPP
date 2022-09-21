@@ -1,12 +1,15 @@
 import 'package:built_value/standard_json_plugin.dart';
 
 import 'users_record.dart';
+import 'project_record.dart';
 import 'chats_record.dart';
 import 'chat_messages_record.dart';
-import 'project_record.dart';
+import 'posts_record.dart';
+import 'comments_record.dart';
 
 import 'index.dart';
 
+export '../algolia/algolia_manager.dart';
 export 'index.dart';
 
 part 'serializers.g.dart';
@@ -15,9 +18,11 @@ const kDocumentReferenceField = 'Document__Reference__Field';
 
 @SerializersFor(const [
   UsersRecord,
+  ProjectRecord,
   ChatsRecord,
   ChatMessagesRecord,
-  ProjectRecord,
+  PostsRecord,
+  CommentsRecord,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())

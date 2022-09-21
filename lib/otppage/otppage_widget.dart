@@ -2,7 +2,6 @@ import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +22,7 @@ class _OtppageWidgetState extends State<OtppageWidget> {
   void initState() {
     super.initState();
     otpController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -37,6 +37,8 @@ class _OtppageWidgetState extends State<OtppageWidget> {
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                 color: Color(0xF7FFFFFF),
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
                 useGoogleFonts: GoogleFonts.asMap()
                     .containsKey(FlutterFlowTheme.of(context).bodyText1Family),
               ),
@@ -126,7 +128,7 @@ class _OtppageWidgetState extends State<OtppageWidget> {
                     style: FlutterFlowTheme.of(context).bodyText1.override(
                           fontFamily:
                               FlutterFlowTheme.of(context).bodyText1Family,
-                          color: FlutterFlowTheme.of(context).white,
+                          color: FlutterFlowTheme.of(context).primaryBtnText,
                           useGoogleFonts: GoogleFonts.asMap().containsKey(
                               FlutterFlowTheme.of(context).bodyText1Family),
                         ),
@@ -140,6 +142,7 @@ class _OtppageWidgetState extends State<OtppageWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: FFButtonWidget(
                       onPressed: () async {
+                        GoRouter.of(context).prepareAuthEvent();
                         final smsCodeVal = otpController!.text;
                         if (smsCodeVal == null || smsCodeVal.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -157,14 +160,7 @@ class _OtppageWidgetState extends State<OtppageWidget> {
                           return;
                         }
 
-                        await Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                NavBarPage(initialPage: 'HomePage'),
-                          ),
-                          (r) => false,
-                        );
+                        context.goNamedAuth('HomePage', mounted);
                       },
                       text: 'Confirm & Continue',
                       options: FFButtonOptions(

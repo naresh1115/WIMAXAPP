@@ -22,6 +22,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
   void initState() {
     super.initState();
     emailFieldController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -33,11 +34,11 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
-            Navigator.pop(context);
+            context.pushNamed('HomePage');
           },
           child: Icon(
             Icons.arrow_back_rounded,
-            color: FlutterFlowTheme.of(context).dark400,
+            color: FlutterFlowTheme.of(context).customColor1,
             size: 24,
           ),
         ),
@@ -103,7 +104,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
               ),
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: Colors.black,
+                    color: FlutterFlowTheme.of(context).primaryText,
                     useGoogleFonts: GoogleFonts.asMap().containsKey(
                         FlutterFlowTheme.of(context).bodyText1Family),
                   ),

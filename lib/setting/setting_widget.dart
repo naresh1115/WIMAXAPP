@@ -2,7 +2,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../main.dart';
+import '../flutter_flow/permissions_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,10 +15,15 @@ class SettingWidget extends StatefulWidget {
 }
 
 class _SettingWidgetState extends State<SettingWidget> {
-  bool? switchListTileValue1;
-  bool? switchListTileValue2;
-  bool? switchListTileValue3;
+  bool? switchListTileValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +43,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             size: 30,
           ),
           onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NavBarPage(initialPage: 'HomePage'),
-              ),
-            );
+            context.pushNamed('HomePage');
           },
         ),
         title: Text(
@@ -81,9 +81,9 @@ class _SettingWidgetState extends State<SettingWidget> {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
             child: SwitchListTile.adaptive(
-              value: switchListTileValue1 ??= true,
+              value: switchListTileValue ??= true,
               onChanged: (newValue) =>
-                  setState(() => switchListTileValue1 = newValue),
+                  setState(() => switchListTileValue = newValue),
               title: Text(
                 'Push Notifications',
                 style: FlutterFlowTheme.of(context).title3,
@@ -92,54 +92,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                 'Receive Push notifications from our application on a semi regular basis.',
                 style: FlutterFlowTheme.of(context).bodyText2,
               ),
-              activeColor: FlutterFlowTheme.of(context).primaryColor,
-              activeTrackColor: Color(0x8A4B39EF),
+              activeColor: FlutterFlowTheme.of(context).primaryBackground,
+              activeTrackColor: FlutterFlowTheme.of(context).tertiary400,
               dense: false,
               controlAffinity: ListTileControlAffinity.trailing,
               contentPadding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
             ),
           ),
-          SwitchListTile.adaptive(
-            value: switchListTileValue2 ??= true,
-            onChanged: (newValue) =>
-                setState(() => switchListTileValue2 = newValue),
-            title: Text(
-              'Email Notifications',
-              style: FlutterFlowTheme.of(context).title3,
-            ),
-            subtitle: Text(
-              'Receive email notifications from our marketing team about new features.',
-              style: FlutterFlowTheme.of(context).bodyText2,
-            ),
-            activeColor: Color(0xFF4B39EF),
-            activeTrackColor: Color(0xFF3B2DB6),
-            dense: false,
-            controlAffinity: ListTileControlAffinity.trailing,
-            contentPadding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
-          ),
-          SwitchListTile.adaptive(
-            value: switchListTileValue3 ??= true,
-            onChanged: (newValue) =>
-                setState(() => switchListTileValue3 = newValue),
-            title: Text(
-              'Location Services',
-              style: FlutterFlowTheme.of(context).title3,
-            ),
-            subtitle: Text(
-              'Allow us to track your location, this helps keep track of spending and keeps you safe.',
-              style: FlutterFlowTheme.of(context).bodyText2,
-            ),
-            activeColor: Color(0xFF4B39EF),
-            activeTrackColor: Color(0xFF3B2DB6),
-            dense: false,
-            controlAffinity: ListTileControlAffinity.trailing,
-            contentPadding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
-          ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
             child: FFButtonWidget(
               onPressed: () async {
-                Navigator.pop(context);
+                await requestPermission(notificationsPermission);
               },
               text: 'Change Changes',
               options: FFButtonOptions(
@@ -148,7 +112,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 color: FlutterFlowTheme.of(context).primaryColor,
                 textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Lexend Deca',
-                      color: Colors.white,
+                      color: FlutterFlowTheme.of(context).primaryBackground,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       useGoogleFonts: GoogleFonts.asMap().containsKey(

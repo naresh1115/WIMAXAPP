@@ -26,17 +26,24 @@ class EditProfileWidget extends StatefulWidget {
 class _EditProfileWidgetState extends State<EditProfileWidget> {
   TextEditingController? emailAddressController;
 
+  TextEditingController? phoneNumberController;
+
   TextEditingController? textController1;
 
   String uploadedFileUrl = '';
-
-  TextEditingController? textController2;
 
   TextEditingController? textController3;
 
   TextEditingController? myBioController;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    emailAddressController = TextEditingController(text: currentUserEmail);
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +71,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             automaticallyImplyLeading: false,
             leading: InkWell(
               onTap: () async {
-                Navigator.pop(context);
+                context.pop();
               },
               child: Icon(
                 Icons.arrow_back_rounded,
@@ -76,7 +83,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               'Edit Profile',
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: FlutterFlowTheme.of(context).customColor1,
+                    color: Colors.white,
                     fontSize: 25,
                     useGoogleFonts: GoogleFonts.asMap().containsKey(
                         FlutterFlowTheme.of(context).bodyText1Family),
@@ -244,13 +251,20 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         contentPadding:
                             EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily:
+                                FlutterFlowTheme.of(context).bodyText1Family,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                FlutterFlowTheme.of(context).bodyText1Family),
+                          ),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
                     child: TextFormField(
-                      controller: textController2 ??= TextEditingController(
+                      controller: phoneNumberController ??=
+                          TextEditingController(
                         text: editProfileUsersRecord.phoneNumber,
                       ),
                       obscureText: false,
@@ -292,7 +306,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         contentPadding:
                             EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily:
+                                FlutterFlowTheme.of(context).bodyText1Family,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                FlutterFlowTheme.of(context).bodyText1Family),
+                          ),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -341,7 +361,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         contentPadding:
                             EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily:
+                                FlutterFlowTheme.of(context).bodyText1Family,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                FlutterFlowTheme.of(context).bodyText1Family),
+                          ),
                     ),
                   ),
                   Padding(
@@ -376,10 +402,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                 ? emailAddressUsersRecordList.first
                                 : null;
                         return TextFormField(
-                          controller: emailAddressController ??=
-                              TextEditingController(
-                            text: editProfileUsersRecord.email,
-                          ),
+                          controller: emailAddressController,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Email Address',
@@ -420,7 +443,16 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                           ),
-                          style: FlutterFlowTheme.of(context).bodyText1,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText1
+                              .override(
+                                fontFamily: FlutterFlowTheme.of(context)
+                                    .bodyText1Family,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .bodyText1Family),
+                              ),
                         );
                       },
                     ),
@@ -470,7 +502,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         contentPadding:
                             EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyText1,
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily:
+                                FlutterFlowTheme.of(context).bodyText1Family,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                FlutterFlowTheme.of(context).bodyText1Family),
+                          ),
                       textAlign: TextAlign.start,
                       maxLines: 3,
                     ),
@@ -483,13 +521,14 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         onPressed: () async {
                           final usersUpdateData = createUsersRecordData(
                             displayName: textController1?.text ?? '',
-                            email: emailAddressController?.text ?? '',
                             photoUrl: uploadedFileUrl,
+                            phoneNumber: phoneNumberController?.text ?? '',
+                            department: textController3?.text ?? '',
                             bio: myBioController?.text ?? '',
                           );
                           await editProfileUsersRecord.reference
                               .update(usersUpdateData);
-                          Navigator.pop(context);
+                          context.pop();
                         },
                         text: 'Save Changes',
                         options: FFButtonOptions(

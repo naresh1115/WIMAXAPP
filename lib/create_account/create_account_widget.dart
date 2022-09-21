@@ -1,14 +1,8 @@
 import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../create_user/create_user_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../login/login_widget.dart';
-import '../main.dart';
-import '../phone/phone_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,25 +35,26 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     emailAddressController = TextEditingController();
     passwordController = TextEditingController();
     passwordVisibility = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Color(0xFF111827),
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 1,
         decoration: BoxDecoration(
-          color: Color(0xFF111827),
+          color: FlutterFlowTheme.of(context).primaryBackground,
         ),
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
@@ -345,12 +340,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginWidget(),
-                            ),
-                          );
+                          context.pushNamed('Login');
                         },
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -390,6 +380,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
+                          GoRouter.of(context).prepareAuthEvent();
                           if (passwordController?.text !=
                               confirmPasswordController?.text) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -411,12 +402,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                             return;
                           }
 
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateUserWidget(),
-                            ),
-                          );
+                          context.pushNamedAuth('createUser', mounted);
                         },
                         text: 'Create',
                         options: FFButtonOptions(
@@ -489,21 +475,16 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                         ),
                                         child: InkWell(
                                           onTap: () async {
+                                            GoRouter.of(context)
+                                                .prepareAuthEvent();
                                             final user =
                                                 await signInWithGoogle(context);
                                             if (user == null) {
                                               return;
                                             }
-                                            await Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NavBarPage(
-                                                        initialPage:
-                                                            'HomePage'),
-                                              ),
-                                              (r) => false,
-                                            );
+
+                                            context.goNamedAuth(
+                                                'HomePage', mounted);
                                           },
                                           child: Image.asset(
                                             'assets/images/Book.png',
@@ -522,13 +503,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                       ),
                                       child: InkWell(
                                         onTap: () async {
-                                          await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PhoneWidget(),
-                                            ),
-                                          );
+                                          context.pushNamed('phone');
                                         },
                                         child: Image.asset(
                                           'assets/images/Book_Copy_2.png',
@@ -539,58 +514,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 12, 0, 44),
-                                child: FFButtonWidget(
-                                  onPressed: () async {
-                                    final usersUpdateData =
-                                        createUsersRecordData(
-                                      displayName: 'Jane Williams',
-                                    );
-                                    await currentUserReference!
-                                        .update(usersUpdateData);
-                                    final user =
-                                        await signInAnonymously(context);
-                                    if (user == null) {
-                                      return;
-                                    }
-                                    await Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            NavBarPage(initialPage: 'HomePage'),
-                                      ),
-                                      (r) => false,
-                                    );
-                                  },
-                                  text: 'Continue as Guest',
-                                  options: FFButtonOptions(
-                                    width: 230,
-                                    height: 50,
-                                    color: Color(0xFFF95522),
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .subtitle2
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .subtitle2Family,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          useGoogleFonts: GoogleFonts.asMap()
-                                              .containsKey(
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle2Family),
-                                        ),
-                                    elevation: 0,
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
                                 ),
                               ),
                             ],

@@ -4,7 +4,6 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../otppage/otppage_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,6 +49,7 @@ class _PhoneWidgetState extends State<PhoneWidget>
     );
 
     phoneNumberController = TextEditingController(text: '+91');
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -57,7 +57,7 @@ class _PhoneWidgetState extends State<PhoneWidget>
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -70,7 +70,7 @@ class _PhoneWidgetState extends State<PhoneWidget>
             size: 30,
           ),
           onPressed: () async {
-            Navigator.pop(context);
+            context.pop();
           },
         ),
         title: Text(
@@ -182,13 +182,7 @@ class _PhoneWidgetState extends State<PhoneWidget>
                   context: context,
                   phoneNumber: phoneNumberVal,
                   onCodeSent: () async {
-                    await Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OtppageWidget(),
-                      ),
-                      (r) => false,
-                    );
+                    context.goNamedAuth('otppage', mounted);
                   },
                 );
               },
